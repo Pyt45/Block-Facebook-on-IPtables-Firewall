@@ -1,0 +1,16 @@
+#!/bin/bash
+ip_address=$(host facebook.com | egrep -o '([0-9]{1,3}[\.]){3}[0-9]{1,3}')
+ip_address_mask=$(whois $ip_address | grep CIDR | tr -d 'CIDR: ')
+
+echo $ip_address
+echo $ip_address_mask
+
+#iptables -A OUTPUT -p tcp -d $ip_address_mask -j DROP
+
+if [ $1 -eq 1 ];
+then
+	sudo iptables -D OUTPUT 1
+elif [ $1 -eq 2 ]
+then
+	sudo iptables -A OUTPUT -p tcp -d $ip_address_mask -j DROP
+fi
